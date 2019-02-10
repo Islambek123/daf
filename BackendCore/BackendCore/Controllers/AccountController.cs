@@ -31,6 +31,7 @@ namespace BackendCore.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]Credentials credentials)
         {
+
             var user = new IdentityUser
             {
                 UserName = credentials.Email,
@@ -43,6 +44,7 @@ namespace BackendCore.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(CreateToken(user));
+
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]Credentials credentials)
