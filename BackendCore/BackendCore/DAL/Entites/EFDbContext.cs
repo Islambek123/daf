@@ -10,6 +10,8 @@ namespace BackendCore.DAL.Entites
 {
     public class EFDbContext : IdentityDbContext<IdentityUser>
     {
+        public DbSet<Products.ProductEntity> Products { get; set; }
+
         public EFDbContext(DbContextOptions<EFDbContext> options)
             : base(options)
         {
