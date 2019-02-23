@@ -17,6 +17,8 @@ namespace BackendCore.DAL.Entites.Products
         [Required, MinLength(length: 1), MaxLength(length: 256)]
         public string Manufactor { get; set; }
         [Required]
-        public string Avaible { get; set; }
+        public string Available { get; set; }
+        [Required]
+        public string Image { get; set; }
     }
 }

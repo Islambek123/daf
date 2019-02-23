@@ -21,9 +21,15 @@ namespace BackendCore
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration) //, IHostingEnvironment env    
         {
             Configuration = configuration;
+
+            //var builder = new ConfigurationBuilder()
+            //.SetBasePath(env.ContentRootPath)
+            //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            //Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -33,7 +39,10 @@ namespace BackendCore
         {
             services.AddCors();
 
-            //services.AddDbContext<EFDbContext>(opt => opt.UseInMemoryDatabase("user"));
+            //services.AddOptions();
+
+            //services.Configure<AppConfiguration>(Configuration.GetSection("ImagePath"));
+
             services.AddDbContext<EFDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
@@ -60,6 +69,7 @@ namespace BackendCore
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.Configure<AppConfiguration>(Configuration.GetSection("ImagePath"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

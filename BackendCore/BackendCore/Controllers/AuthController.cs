@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,17 +18,18 @@ namespace BackendCore.Controllers
         public string Password { get; set; }
     }
     [Produces("application/json")]
-    [Route("api/Account")]
-    public class AccountController : ControllerBase
+    [Route("api/auth")]
+    public class AuthController : ControllerBase
     {
         readonly UserManager<IdentityUser> _userManager;
         readonly SignInManager<IdentityUser> _signInManager;
-        public AccountController(UserManager<IdentityUser> userManager,
+        public AuthController(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]Credentials credentials)
         {
@@ -44,8 +46,8 @@ namespace BackendCore.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(CreateToken(user));
-
         }
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]Credentials credentials)
         {

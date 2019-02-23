@@ -1,22 +1,25 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Routes from './routes';
-import { BrowserRouter, NavLink } from 'react-router-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { BrowserRouter } from "react-router-dom";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { Provider } from "react-redux";
 
-const App = () => (
-        <div>
-                <h1>NavBar elo</h1>
-                <ul>
-                        <li><NavLink to="/register" exact>Register</NavLink></li>
-                        <li><NavLink to="/login" exact>Login</NavLink></li>
-                        <li><NavLink to="/" exact>Home</NavLink></li>
-                </ul>
-                <Routes />
-        </div>
+import rootReducer from "./rootReducer";
+
+const store = createStore(
+    rootReducer,
+    composeWithDevTools(
+        applyMiddleware(thunk)
+    )
 );
+
 ReactDOM.render(
-        <BrowserRouter>
-                <App />
-        </BrowserRouter>,
-        document.getElementById('root'));
+    <BrowserRouter>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </BrowserRouter>, document.getElementById('root'));
 

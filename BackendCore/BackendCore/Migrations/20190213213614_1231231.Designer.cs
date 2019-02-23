@@ -4,14 +4,16 @@ using BackendCore.DAL.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackendCore.Migrations
 {
     [DbContext(typeof(EFDbContext))]
-    partial class EFDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190213213614_1231231")]
+    partial class _1231231
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,15 +27,12 @@ namespace BackendCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Available")
+                    b.Property<string>("Avaible")
                         .IsRequired();
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2041);
-
-                    b.Property<string>("Image")
-                        .IsRequired();
 
                     b.Property<string>("Manufactor")
                         .IsRequired()
