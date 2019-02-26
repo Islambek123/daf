@@ -57,11 +57,12 @@ namespace BackendCore.Controllers
                     Name = g.Name,
                     Description = g.Description,
                     Manufactor = g.Manufactor,
-                    Available = g.Available
+                    Available = g.Available,
+                    Image = g.Image
                 }).ToList();
             return model;
         }
-
+        [HttpGet("{id}")]
         public ActionResult<ProductEntity> Get(int id)
         {
             var model = new ProductEntity();
@@ -72,8 +73,9 @@ namespace BackendCore.Controllers
                 model.Id = product.Id;
                 model.Name = product.Name;
                 model.Description = product.Description;
-                model.Manufactor = folder + product.Manufactor;
+                model.Manufactor = product.Manufactor;
                 model.Available = product.Available;
+                model.Image = product.Image; //?>?????
             }
             return model;
         }
@@ -108,9 +110,9 @@ namespace BackendCore.Controllers
                     Id = game.Id,
                     Name = game.Name,
                     Description = game.Description,
-                    Image = image,
+                    Image = game.Image,
                     Manufactor = game.Manufactor,
-                    Avaible = game.Available
+                    Available = game.Available
                 };
                 return responseModel;
             }
@@ -119,7 +121,9 @@ namespace BackendCore.Controllers
             var errors = GetErrorsByModel(ModelState);
             return BadRequest(errors);
         }
-        public ActionResult<ProductViewModel> Put(ProductViewModel model)
+        [HttpPut("{id}")]
+        //[Route("api/product/{id:int}")]
+        public ActionResult<ProductViewModel> Put(int id, [FromBody]ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -129,8 +133,9 @@ namespace BackendCore.Controllers
                 {
                     product.Name = model.Name;
                     product.Description = model.Description;
-                    product.Available = model.Avaible;
+                    product.Available = model.Available;
                     product.Manufactor = model.Manufactor;
+                    product.Image = model.Image;
                     _context.SaveChanges();
                 }
                 return model;
@@ -140,28 +145,24 @@ namespace BackendCore.Controllers
 
             return BadRequest(errors);
         }
-        //public IHttpActionResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var game = _context.Games
-        //            .SingleOrDefault(g => g.Id == id);
-        //        if (game != null)
-        //        {
-        //            _context.Games.Remove(game);
-        //            _context.SaveChanges();
-        //        }
-        //        return Content(HttpStatusCode.OK, new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Content(HttpStatusCode.InternalServerError,
-        //            new { errors = new { global = ex.Message } });
-        //    }
-
-
-
-
-        //} 
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var product = _context.Products
+                    .SingleOrDefault(g => g.Id == id);
+                if (product != null)
+                {
+                    _context.Products.Remove(product);
+                    _context.SaveChanges();
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

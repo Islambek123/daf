@@ -86,7 +86,7 @@ class LoginForm extends Component {
                 </div>
 
                 <div className={classnames('form-group', { 'has-error': !!errors.password })}>
-                    <label htmlFor="password">Email / Username</label>
+                    <label htmlFor="password">Password</label>
                     <input type="password"
                         className="form-control"
                         id="password"

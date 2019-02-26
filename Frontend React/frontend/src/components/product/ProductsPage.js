@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import ProductsList from "./ProductsList";
-import { fetchProducts, deleteProduct  } from "../../Octions";
+import { fetchProducts, deleteProduct  } from "../../actions";
 import { Link } from "react-router-dom";
 
 class ProductsPage extends Component {

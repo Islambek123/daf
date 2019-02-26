@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { saveProduct, fetchProduct, updateProduct } from '../../Octions';
+import { saveProduct, fetchProduct, updateProduct } from '../../actions';
 import { Redirect } from 'react-router';
 import ProductForm from './ProductForm';
 

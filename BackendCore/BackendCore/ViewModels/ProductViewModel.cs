@@ -11,7 +11,7 @@ namespace BackendCore.ViewModels
         public string Name { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
-        public string Avaible { get; set; }
+        public string Available { get; set; }
         public string Manufactor{ get; set; }
     }
 }

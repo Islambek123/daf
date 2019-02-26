@@ -3,97 +3,96 @@ import axios from "axios";
 export const INC_COUNTER='INCREMENT';
 export const DEC_COUNTER='DECREMENT';
 
-export const SET_GAMES='SET_GAMES';
-export const ADD_GAME="ADD_GAME";
-export const GAME_FETCHED="GAME_FETCHED";
-export const GAME_UPDATED="GAME_UPDATED";
-export const GAME_DELETED="GAME_DELETED";
+export const SET_PRODUCTS='SET_PRODUCTS';
+export const ADD_PRODUCT="ADD_PRODUCT";
+export const PRODUCT_FETCHED="PRODUCT_FETCHED";
+export const PRODUCT_UPDATED="PRODUCT_UPDATED";
+export const PRODUCT_DELETED="PRODUCT_DELETED";
 
 
-export function setGames(games) {
+export function setProducts(products) {
     return {
-        type: SET_GAMES,
-        games
+        type: SET_PRODUCTS,
+        products
     };
 }
-export function addGame(game) {
+export function addProduct(product) {
     return{
-        type:ADD_GAME,
-        game
+        type:ADD_PRODUCT,
+        product
     }
 }
-export function gameFetched(game) {
+export function productFetched(product) {
     return {
-        type: GAME_FETCHED,
-        game 
+        type:PRODUCT_FETCHED,
+         product
     }
 }
-export function gameUpdated(game) {
+export function productUpdated(product) {
     return {
-        type: GAME_UPDATED,
-        game 
+        type: PRODUCT_UPDATED,
+        product
     }
 }
-export function gameDeleted(gameId) {
+export function productDeleted(productId) {
     return {
-        type: GAME_DELETED,
-        gameId 
+        type: PRODUCT_DELETED,
+        productId 
     }
 }
 
-export function saveGame(data){
+export function saveProduct(data){
 
     return dispatch => {
-        return axios.post(`http://localhost:44318/api/Game`, data)
+        return axios.post(`https://localhost:44318/api/product`, data)
           .then(resp => {
               //throw new Error('sss');
               console.log("---Data insert by Redux---", resp.data);
-            dispatch(addGame(resp.data))
+            dispatch(addProduct(resp.data))
           });
       };
 }
-export function updateGame(data){
+export function updateProduct(data){
 
     return dispatch => {
-        return axios.put(`http://localhost:44318/api/Game/${data.id}`, data)
+        return axios.put(`https://localhost:44318/api/product/${data.id}`, data)
           .then(resp => {
               //throw new Error('sss');
               console.log("---Data updated by Redux---", resp.data);
-            dispatch(gameUpdated(resp.data))
+            dispatch(productUpdated(resp.data))
           });
       };
 }
-
-export function fetchGames() {
+export function fetchProducts() {
     return dispatch => {
-        fetch('http://localhost:44318/api/game')
+        fetch(`https://localhost:44318/api/product`)
         .then(res => res.json())
-        .then(data => dispatch(setGames(data)))
+        .then(data => dispatch(setProducts(data)))
         .catch(err => {
-            console.log("-----Bad request----", err);
+            console.log("-----Bad request----2", err);
         });
     }
 }
 
-export function fetchGame(id) {
+export function fetchProduct(id) {
     return dispatch => {
-        fetch(`http://localhost:44318/api/game/${id}`)
+        fetch(`https://localhost:44318/api/product/${id}`)
         .then(res => res.json())
-        .then(data => dispatch(gameFetched(data)))
+        .then(data => dispatch(productFetched(data)))
         .catch(err => {
-            console.log("-----Bad request----", err);
+            console.log("-----Bad request----1", err);
         });
     }
 }
 
-export function deleteGame(id){
+export function deleteProduct(id){
 
     return dispatch => {
-        return axios.delete(`http://localhost:44318/api/Game/${id}`)
+        return axios.delete(`https://localhost:44318/api/product/${id}`)
           .then(resp => {
               //throw new Error('sss');
               console.log("---Data updated by Redux---", resp.data);
-            dispatch(gameDeleted(id))
+            dispatch(productDeleted(id))
           });
       };
 }

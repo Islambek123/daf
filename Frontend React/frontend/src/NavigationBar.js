@@ -19,11 +19,10 @@ class NavigationBar extends Component {
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav">
                             <li><Link to="/counterpage">Counter</Link></li>
-                            <li><Link to="/games">Games</Link></li>
                             <li><Link to ="/products">Products</Link></li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
-                            <li><a href="../navbar-static-top/">Sign up</a></li>
+                            <li><Link to="/register">Register</Link></li>
                             <li><Link to="/login">Sign in</Link></li>
                         </ul>
                     </div>

@@ -1,4 +1,4 @@
-import { SET_PRODUCTS, ADD_PRODUCT, PRODUCT_FETCHED, PRODUCT_UPDATED, PRODUCT_DELETED } from "../Octions";
+import { SET_PRODUCTS, ADD_PRODUCT, PRODUCT_FETCHED, PRODUCT_UPDATED, PRODUCT_DELETED } from "../actions";
 export default function products(state=[], action={}) {
     switch (action.type) {
         case SET_PRODUCTS:

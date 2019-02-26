@@ -15,6 +15,7 @@ namespace BackendCore.Controllers
     public class Credentials
     {
         public string Email { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
     }
     [Produces("application/json")]
@@ -55,7 +56,7 @@ namespace BackendCore.Controllers
                 .PasswordSignInAsync(credentials.Email, credentials.Password,
                 false, false);
             if (!result.Succeeded)
-                return BadRequest();
+                return BadRequest(result.Succeeded);
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
             return Ok(CreateToken(user));
