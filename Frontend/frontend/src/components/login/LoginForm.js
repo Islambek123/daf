@@ -6,11 +6,9 @@ import { login } from "../../actions/login";
 
 class LoginForm extends Component {
     state = {
-        identifier: '',
+        email: '',
         password: '',
-        errors: {
-            //password: "Вкажи пароль"
-        },
+        errors: {},
         done: false,
         isLoading: false
     }
@@ -41,14 +39,14 @@ class LoginForm extends Component {
 
         //validation
         let errors = {};
-        if (this.state.identifier === '') errors.identifier = "Cant't be empty!"
+        if (this.state.email === '') errors.email = "Cant't be empty!"
         if (this.state.password === '') errors.password = "Cant't be empty!"
 
         const isValid = Object.keys(errors).length === 0
         if (isValid) {
-            const { identifier, password } = this.state;
+            const { email, password } = this.state;
             this.setState({ isLoading: true });
-            this.props.login({ identifier, password }).then(
+            this.props.login({ email, password }).then(
                 () => this.setState({ done: true }),
                 (err) => this.setState({ errors: err.response.data, isLoading: false })
             );
@@ -74,15 +72,15 @@ class LoginForm extends Component {
                         <div className="alert alert-danger">
                             <strong>Danger!</strong> {errors.invalid}.
                     </div> : ''}
-                <div className={classnames('form-group', { 'has-error': !!errors.identifier })}>
-                    <label htmlFor="identifier">Email / Username</label>
+                <div className={classnames('form-group', { 'has-error': !!errors.email })}>
+                    <label htmlFor="email">Email</label>
                     <input type="text"
                         className="form-control"
-                        id="identifier"
-                        name="identifier"
-                        value={this.state.identifier}
+                        id="email"
+                        name="email"
+                        value={this.state.email}
                         onChange={this.handleChange} />
-                    {!!errors.identifier ? <span className="help-block">{errors.identifier}</span> : ''}
+                    {!!errors.email ? <span className="help-block">{errors.email}</span> : ''}
                 </div>
 
                 <div className={classnames('form-group', { 'has-error': !!errors.password })}>

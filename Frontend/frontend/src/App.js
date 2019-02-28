@@ -13,6 +13,10 @@ import ProductsPage from './components/product/ProductsPage';
 import ProductFormPage from './components/product/ProductFormPage';
 import RegisterPage from './components/registration/RegisterPage';
 
+import { loadReCaptcha } from 'react-recaptcha-google'
+
+import requireAuth from './utils/requireAuth';
+
 class App extends Component {
   render() {
     return (
@@ -25,13 +29,17 @@ class App extends Component {
         
         <Route exact path='/login' component={LoginPage} />
 
-        <Route exact path = '/products' component = {ProductsPage}/>
+        <Route exact path = '/products' component = {requireAuth(ProductsPage)}/>
         <Route exact path = '/products/new' component = {ProductFormPage}/>
         <Route exact path = '/product/:id' component = {ProductFormPage}/>
 
         <Route exact path = '/register' component = {RegisterPage} />
+        
       </div> 
     );
+  }
+  componentDidMount(){
+    loadReCaptcha();
   }
 }
 

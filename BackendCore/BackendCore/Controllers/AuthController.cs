@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -14,9 +15,12 @@ namespace BackendCore.Controllers
 {
     public class Credentials
     {
+        [Required]
         public string Email { get; set; }
-        public string UserName { get; set; }
+        [Required]
         public string Password { get; set; }
+        [Required]
+        public string Captcha { get; set; }
     }
     [Produces("application/json")]
     [Route("api/auth")]
@@ -34,7 +38,6 @@ namespace BackendCore.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]Credentials credentials)
         {
-
             var user = new IdentityUser
             {
                 UserName = credentials.Email,
@@ -46,7 +49,8 @@ namespace BackendCore.Controllers
                 return BadRequest(result.Errors);
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(CreateToken(user));
+            //return Ok(CreateToken(user));
+            return Ok("User Created.");
         }
         [AllowAnonymous]
         [HttpPost("login")]
@@ -65,7 +69,8 @@ namespace BackendCore.Controllers
         {
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id)
+                new Claim("id", user.Id),
+                new Claim("name", user.UserName),
             };
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is the secret phrase"));

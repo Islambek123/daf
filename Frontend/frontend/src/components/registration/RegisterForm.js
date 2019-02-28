@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { register } from "../../actions/register";
+import { ReCaptcha } from 'react-recaptcha-google';
 
 class RegisterForm extends Component {
     state = {
@@ -13,6 +14,27 @@ class RegisterForm extends Component {
         errors: {},
         done: false,
         isLoading: false
+    }
+    constructor(props, context) {
+        super(props, context);
+
+        this.onLoadRecaptcha = this.onLoadRecaptcha.bind(this);
+        this.verifyCallback = this.verifyCallback.bind(this);
+    }
+    componentDidMount() {
+        if (this.captchaDemo) {
+            console.log("captcha started, just a second...")
+            this.captchaDemo.reset();
+        }
+    }
+    onLoadRecaptcha() {
+        if (this.captchaDemo) {
+            this.captchaDemo.reset();
+        }
+    }
+    verifyCallback(recaptchaToken) {
+        // Here you will get the final recaptchaToken!!!  
+        console.log(recaptchaToken, "<= your recaptcha token")
     }
     onSubmitForm = (e) => {
         e.preventDefault();
@@ -62,10 +84,10 @@ class RegisterForm extends Component {
     }
     render() {
         const { errors, isLoading } = this.state;
-        
-            const form = (
+
+        const form = (
             <form onSubmit={this.onSubmitForm}>
-            <h1>Registration</h1>
+                <h1>Registration</h1>
                 <div className="form-group">
                     <div className={classnames('form-group', { 'has-error': !!errors.email })}>
                         <label htmlFor="email">Email</label>
@@ -102,16 +124,25 @@ class RegisterForm extends Component {
                         {!!errors.password ? <span className="help-block">{errors.password}</span> : ''}
                     </div>
                 </div>
+                <ReCaptcha
+                    ref={(el) => { this.captchaDemo = el; }}
+                    size="normal"
+                    data-theme="dark"
+                    render="explicit"
+                    sitekey="6LfXVZQUAAAAAPeiWCpyFh6CmV7hhLN_KYRZIIaD"
+                    onloadCallback={this.onLoadRecaptcha}
+                    verifyCallback={this.verifyCallback}
+                />
                 <div className="form-group">
                     <div className="col-md-4">
                         <button type="submit" className="btn btn-warning" disabled={isLoading}>Вхід<span className="glyphicon glyphicon-send"></span></button>
                     </div>
                 </div>
             </form>
-            );
-            return (
-                form
-            );
+        );
+        return (
+            form
+        );
     }
 }
 
