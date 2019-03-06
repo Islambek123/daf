@@ -78,6 +78,7 @@ namespace BackendCore
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<AppConfiguration>(Configuration.GetSection("ImagePath"));
+            services.Configure<AppConfiguration>(Configuration.GetSection("GoogleReCaptcha"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

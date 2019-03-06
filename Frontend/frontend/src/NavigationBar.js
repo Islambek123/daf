@@ -1,10 +1,37 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from './actions/authActions';
 
 class NavigationBar extends Component {
-    state = {  }
-    render() { 
-        return ( 
+    state = {}
+
+    logout(e) {
+        e.preventDefault();
+        this.props.logout();
+    }
+
+    render() {
+        console.log("login user: ", this.props);
+
+        const { isAuthenticated, user } = this.props.auth;
+        
+        console.log(isAuthenticated);
+
+        const userLinks = (
+            <ul className="nav navbar-nav navbar-right">
+                <li><a href="#" onClick={this.logout.bind(this)}>{user.name} Logout</a></li>
+            </ul>
+        );
+        //const userLinks = ''; 
+        const guestLinks = (
+            <ul className="nav navbar-nav navbar-right">
+                <li><Link to="/register">Register</Link></li>
+                <li><Link to="/login">Login</Link></li>
+            </ul>
+        );
+
+        return (
             <nav className="navbar navbar-default">
                 <div className="container-fluid">
                     <div className="navbar-header">
@@ -14,22 +41,23 @@ class NavigationBar extends Component {
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <Link className="navbar-brand" to="/games">Project crocodile</Link>
+                        <Link className="navbar-brand" to="/products">Project crocodile</Link>
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav">
-                            <li><Link to="/counterpage">Counter</Link></li>
                             <li><Link to ="/products">Products</Link></li>
                         </ul>
-                        <ul className="nav navbar-nav navbar-right">
-                            <li><Link to="/register">Register</Link></li>
-                            <li><Link to="/login">Sign in</Link></li>
-                        </ul>
+                        {isAuthenticated ? userLinks : guestLinks}
                     </div>
                 </div>
             </nav>
-         );
+        );
     }
 }
- 
-export default NavigationBar;
+const mapStateToProps=(state)=>{
+    return {
+        auth: state.auth
+    };
+}
+
+export default connect(mapStateToProps, {logout})(NavigationBar);

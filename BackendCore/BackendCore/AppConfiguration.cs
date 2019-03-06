@@ -8,5 +8,6 @@ namespace BackendCore
     public class AppConfiguration
     {
         public string Path { get; set; }
+        public string Secret{ get; set; }
     }
 }

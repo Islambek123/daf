@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
-import { register } from "../../actions/register";
 import { ReCaptcha } from 'react-recaptcha-google';
+import { Redirect } from 'react-router';
 
 class RegisterForm extends Component {
     state = {
         email: '',
         username: '',
         password: '',
+        captcha: '',
 
         errors: {},
+
         done: false,
         isLoading: false
     }
@@ -20,48 +21,6 @@ class RegisterForm extends Component {
 
         this.onLoadRecaptcha = this.onLoadRecaptcha.bind(this);
         this.verifyCallback = this.verifyCallback.bind(this);
-    }
-    componentDidMount() {
-        if (this.captchaDemo) {
-            console.log("captcha started, just a second...")
-            this.captchaDemo.reset();
-        }
-    }
-    onLoadRecaptcha() {
-        if (this.captchaDemo) {
-            this.captchaDemo.reset();
-        }
-    }
-    verifyCallback(recaptchaToken) {
-        // Here you will get the final recaptchaToken!!!  
-        console.log(recaptchaToken, "<= your recaptcha token")
-    }
-    onSubmitForm = (e) => {
-        e.preventDefault();
-
-        //validation
-        let errors = {};
-        if (this.state.email === '') errors.email = "Cant't be empty!"
-        if (this.state.username === '') errors.username = "Cant't be empty!"
-        if (this.state.password === '') errors.password = "Cant't be empty!"
-        if (this.state.password.length < 6) errors.password = "Minimum length is 7"
-
-        const isValid = Object.keys(errors).length === 0
-        if (isValid) {
-            const { email, username, password } = this.state;
-            this.setState({ isLoading: true });
-            this.props.register({ email, username, password }).then(
-                () => this.setState({ done: true }),
-                (err) => this.setState({ errors: err.response.data, isLoading: false })
-            );
-            //this.props.saveGame({id, title, image, description})
-            //    .catch((err) => { 
-            //        this.setState({ errors: err.response.data });
-            //     });
-        }
-        else {
-            this.setState({ errors });
-        }
     }
     setStateByErrors = (name, value) => {
         if (!!this.state.errors[name]) {
@@ -82,6 +41,61 @@ class RegisterForm extends Component {
     handleChange = (e) => {
         this.setStateByErrors(e.target.name, e.target.value);
     }
+    onSubmitForm = (e) => {
+        e.preventDefault();
+        //validation
+        const { email, username, password, captcha } = this.state;
+
+        let errors = {};
+        if (this.state.email === '') errors.email = "Cant't be empty!"
+        if (this.state.username === '') errors.username = "Cant't be empty!"
+        if (this.state.password === '') errors.password = "Cant't be empty!"
+        if (this.state.password.length < 6) errors.password = "Minimum length is 7!"
+        if (this.state.captcha === '') errors.captcha = "Confirm Captcha!"
+
+        const isValid = Object.keys(errors).length === 0
+        if (isValid) {
+            this.props.register(
+                {
+                    Captcha: captcha,
+                    Email: email,
+                    UserName: username,
+                    Password: password,
+                    
+                }).then(
+                    () => {
+                        this.props.addFlashMessage({
+                            type: 'success',
+                            text: 'Реєстрація пройшла успішно'
+                        });
+                        this.setState({ done: true })
+                    },
+                    (err) => this.setState({ errors: err.response.data })
+                );
+        }
+        else {
+            this.setState({ errors });
+        }
+
+    }
+    componentDidMount() {
+        if (this.captchaDemo) {
+            console.log("captcha started, just a second...")
+            this.captchaDemo.reset();
+        }
+    }
+    onLoadRecaptcha() {
+        if (this.captchaDemo) {
+            this.captchaDemo.reset();
+        }
+    }
+    verifyCallback  (recaptchaToken) {
+        //this.setState({ captcha: recaptchaToken });
+        this.state.captcha = recaptchaToken
+        console.log(recaptchaToken, "<= your recaptcha token")
+    }
+   
+    
     render() {
         const { errors, isLoading } = this.state;
 
@@ -124,15 +138,22 @@ class RegisterForm extends Component {
                         {!!errors.password ? <span className="help-block">{errors.password}</span> : ''}
                     </div>
                 </div>
-                <ReCaptcha
-                    ref={(el) => { this.captchaDemo = el; }}
-                    size="normal"
-                    data-theme="dark"
-                    render="explicit"
-                    sitekey="6LfXVZQUAAAAAPeiWCpyFh6CmV7hhLN_KYRZIIaD"
-                    onloadCallback={this.onLoadRecaptcha}
-                    verifyCallback={this.verifyCallback}
-                />
+                <div className="form-group">
+                    <div className={classnames('form-group', { 'has-error': !!errors.captcha })}>
+                        <ReCaptcha
+                            id="captcha"
+                            name="captcha"
+                            ref={(el) => { this.captchaDemo = el; }}
+                            size="normal"
+                            data-theme="dark"
+                            render="explicit"
+                            sitekey="6LfXVZQUAAAAAPeiWCpyFh6CmV7hhLN_KYRZIIaD"
+                            onloadCallback={this.onLoadRecaptcha}
+                            verifyCallback={this.verifyCallback}
+                        />
+                        {!!errors.captcha ? <span className="help-block">{errors.captcha}</span> : ''}
+                    </div>
+                </div>
                 <div className="form-group">
                     <div className="col-md-4">
                         <button type="submit" className="btn btn-warning" disabled={isLoading}>Вхід<span className="glyphicon glyphicon-send"></span></button>
@@ -141,7 +162,9 @@ class RegisterForm extends Component {
             </form>
         );
         return (
-            form
+            this.state.done ?
+                    <Redirect to="/login" /> :
+                    form
         );
     }
 }
@@ -151,4 +174,4 @@ RegisterForm.propTypes =
         register: PropTypes.func.isRequired
     }
 
-export default connect(null, { register })(RegisterForm);
+    export default RegisterForm;

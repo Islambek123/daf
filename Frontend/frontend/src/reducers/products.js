@@ -1,5 +1,5 @@
-import { SET_PRODUCTS, ADD_PRODUCT, PRODUCT_FETCHED, PRODUCT_UPDATED, PRODUCT_DELETED } from "../actions";
-export default function products(state=[], action={}) {
+import { SET_PRODUCTS, ADD_PRODUCT, PRODUCT_FETCHED, PRODUCT_UPDATED, PRODUCT_DELETED } from "../actions/types";
+export default function products(state = [], action = {}) {
     switch (action.type) {
         case SET_PRODUCTS:
             return action.products;
@@ -26,7 +26,6 @@ export default function products(state=[], action={}) {
             }
 
         case PRODUCT_UPDATED:
-        //return Object.assign({}, state, action.game);
             return state.map(item => {
                 if (item.id == action.product.id) return action.product;
                 return item;

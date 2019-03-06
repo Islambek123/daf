@@ -1,14 +1,5 @@
 import axios from "axios";
-
-export const INC_COUNTER = 'INCREMENT';
-export const DEC_COUNTER = 'DECREMENT';
-
-export const SET_PRODUCTS = 'SET_PRODUCTS';
-export const ADD_PRODUCT = "ADD_PRODUCT";
-export const PRODUCT_FETCHED = "PRODUCT_FETCHED";
-export const PRODUCT_UPDATED = "PRODUCT_UPDATED";
-export const PRODUCT_DELETED = "PRODUCT_DELETED";
-
+import { ADD_PRODUCT, SET_PRODUCTS, PRODUCT_FETCHED, PRODUCT_UPDATED, PRODUCT_DELETED } from "./types";
 
 export function setProducts(products) {
     return {
@@ -17,31 +8,31 @@ export function setProducts(products) {
     };
 }
 
-export function addProduct(product) {
-    return {
-        type: ADD_PRODUCT,
-        product
+export function addProduct(PRODUCT) {
+    return{
+        type:ADD_PRODUCT,
+        PRODUCT
     }
 }
 
 export function productFetched(product) {
     return {
         type: PRODUCT_FETCHED,
-        product
+        product 
     }
 }
 
 export function productUpdated(product) {
     return {
         type: PRODUCT_UPDATED,
-        product
+        product 
     }
 }
 
 export function productDeleted(productId) {
     return {
         type: PRODUCT_DELETED,
-        productId
+        productId 
     }
 }
 
@@ -98,3 +89,4 @@ export function deleteProduct(id) {
             });
     };
 }
+

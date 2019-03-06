@@ -2,24 +2,45 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import ProductsList from "./ProductsList";
-import { fetchProducts, deleteProduct  } from "../../actions";
+import { fetchProducts, deleteProduct } from "../../actions/productActions";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router";
 
 class ProductsPage extends Component {
-    state = {  }
-
-    componentDidMount() {
-        this.props.fetchProducts();
+    state = {
+        redirect: false,
+        loading: true
     }
 
-    render() { 
+    componentDidMount() {
+        this.props.fetchProducts()
+            .then(
+                () => { this.setState({ loading: false }) },
+                (err) => {
+                    if (typeof (err.response) == 'undefined')
+                        console.log("err.response", err);
+                    else if (err.response.status == 401) {
+                        this.setState({ redirect: true });
+                    }
+                }
+            );
+    }
+
+    render() {
         console.log("--props ProductsPage---", this.props);
-        return ( 
-        <div>
-            <h1>Page Products</h1>
-            <Link to="/products/new" className="btn btn-success">Додати гру</Link>
-            <ProductsList products={this.props.products} deleteProduct={this.props.deleteProduct}/>
-        </div> 
+        const { loading } = this.state;
+        const page = (
+            loading ? <span>Loading ...</span> :
+                <div>
+                    <h1>Page Products</h1>
+                    <Link to="/products/new" className="btn btn-success">Add Product</Link>
+                    <ProductsList products={this.props.products} deleteProduct={this.props.deleteProduct} />
+                </div>
+        );
+        return (
+            this.state.redirect ?
+                <Redirect to="/login" /> :
+                page
         );
     }
 }
@@ -31,10 +52,10 @@ ProductsPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-    
+
     return {
         products: state.products
-    }; 
+    };
 }
- 
-export default connect(mapStateToProps, {fetchProducts, deleteProduct})(ProductsPage);
+
+export default connect(mapStateToProps, { fetchProducts, deleteProduct })(ProductsPage);

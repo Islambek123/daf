@@ -31,9 +31,6 @@ class ProductForm extends React.Component {
                 { [name]: value })
         }
     }
-
-    //компонент получает новые props. 
-    //Этод метод не вызывается в момент первого render'a
     componentWillReceiveProps = (nextProps) => {
         //console.log('--Change propts---',nextProps);
         this.setState({
@@ -100,7 +97,7 @@ class ProductForm extends React.Component {
         const { errors } = this.state;
         const form = (
             <form onSubmit={this.onSubmitForm}>
-                <h1>Додати нову гру</h1>
+                <h1>Add Product</h1>
 
                 <div className={classnames('form-group', { 'has-error': !!errors.name })}>
                     <label htmlFor="name">Назва</label>

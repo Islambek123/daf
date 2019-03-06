@@ -8,7 +8,7 @@ class ProductCard extends Component {
         console.log('--product in props--', this.props);
         const { product } = this.props;
         return ( 
-            <div className="item  col-xs-4 col-lg-4">
+            <div className="item col-xs-4 col-lg-4">
                 <div className="thumbnail">
                     <img className="group list-group-image" src={product.image} alt="" />
                     <div className="caption">

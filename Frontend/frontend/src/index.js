@@ -8,6 +8,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 
 import rootReducer from "./rootReducer";
+import setAuthorizationToken from './utils/setAuthorizationToken';
+import { setCurrentUser } from './actions/authActions';
 
 const store = createStore(
     rootReducer,
@@ -16,10 +18,17 @@ const store = createStore(
     )
 );
 
+if (localStorage.jwtToken) {
+    //localStorage.clear();
+    localStorage.clear();
+    setAuthorizationToken(localStorage.jwtToken);
+    store.dispatch(setCurrentUser(JSON.parse(localStorage.user))); //rofaln
+}
+
 ReactDOM.render(
     <BrowserRouter>
         <Provider store={store}>
-            <App />
+            <App/>
         </Provider>
     </BrowserRouter>, document.getElementById('root'));
 
