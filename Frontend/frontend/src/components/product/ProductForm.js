@@ -1,6 +1,11 @@
 import React from 'react';
 import classnames from 'classnames';
+import Select from 'react-select';
 
+const options = [
+    { value: 'Available', label: 'Available' },
+    { value: 'Not Available', label: 'Not Available' }
+  ];
 
 class ProductForm extends React.Component {
     state = {
@@ -10,10 +15,16 @@ class ProductForm extends React.Component {
         description: this.props.product ? this.props.product.description : '',
         available: this.props.product ? this.props.product.available : '',
         manufactor: this.props.product ? this.props.product.manufactor : '',
+        addOrEdit: 'Add',
         errors: {
             //name: 'Обовязкове поле'
         },
         loading: false
+    }
+    constructor(props){
+        super(props);
+
+        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
     setStateByErrors = (name, value) => {
         if (!!this.state.errors[name]) {
@@ -32,21 +43,26 @@ class ProductForm extends React.Component {
         }
     }
     componentWillReceiveProps = (nextProps) => {
-        //console.log('--Change propts---',nextProps);
+
         this.setState({
             id: nextProps.product.id,
             name: nextProps.product.name,
             image: nextProps.product.image,
             description: nextProps.product.description,
             available: nextProps.product.available,
-            manufactor: nextProps.product.manufactor
+            manufactor: nextProps.product.manufactor,
+            addOrEdit: 'Edit'
         });
     }
 
     handleChange = (e) => {
         this.setStateByErrors(e.target.name, e.target.value);
     }
-
+    handleSelectChange(selectedOption){
+        this.setState({
+            available: selectedOption.value
+        });
+    }
     uploadImageBase64 = (evt) => {
         const { name } = evt.target;
         if (evt.target.files && evt.target.files[0]) {
@@ -94,44 +110,44 @@ class ProductForm extends React.Component {
     render() {
         console.log("this.props", this.props);
         console.log("this.state", this.state);
-        const { errors } = this.state;
+        const { errors, addOrEdit } = this.state;
         const form = (
             <form onSubmit={this.onSubmitForm}>
-                <h1>Add Product</h1>
+                <h1>{addOrEdit} Product</h1>
 
                 <div className={classnames('form-group', { 'has-error': !!errors.name })}>
-                    <label htmlFor="name">Назва</label>
+                    <label htmlFor="name">Name</label>
                     <input type="text"
                         className="form-control"
                         id="name"
                         name="name"
                         value={this.state.name}
                         onChange={this.handleChange}
-                        placeholder="Назва" />
+                        placeholder="Name" />
                     {!!errors.name ? <span className="help-block">{errors.name}</span> : ''}
                 </div>
 
 
                 <div className={classnames('form-group', { 'has-error': !!errors.description })} >
-                    <label htmlFor="description">Опис</label>
+                    <label htmlFor="description">Description</label>
                     <textarea type="text"
                         className="form-control"
                         id="description"
                         name="description"
                         value={this.state.description}
                         onChange={this.handleChange}
-                        placeholder="Опис" />
+                        placeholder="Description" />
                     {!!errors.description ? <span className="help-block">{errors.description}</span> : ''}
                 </div>
                 <div className={classnames('form-group', { 'has-error': !!errors.available })} >
-                    <label htmlFor="available">Доступно</label>
-                    <textarea type="text"
-                        className="form-control"
-                        id="available"
-                        name="available"
-                        value={this.state.available}
-                        onChange={this.handleChange}
-                        placeholder="Доступно" />
+                    <label htmlFor="available">Available</label>
+                    <Select 
+                        name = "available"
+                        value={this.state.available} 
+                        placeholder = {this.state.available ? this.state.available : "Select"}
+                        isSearchable = {false}
+                        onChange={this.handleSelectChange} 
+                        options = {options}/>
                     {!!errors.available ? <span className="help-block">{errors.available}</span> : ''}
                 </div>
                 <div className={classnames('form-group', { 'has-error': !!errors.manufactor })} >
@@ -147,13 +163,13 @@ class ProductForm extends React.Component {
                 </div>
 
                 <div className={classnames('form-group', { 'has-error': !!errors.image })}>
-                    <label htmlFor="image">Фото</label>
+                    <label htmlFor="image">Photo</label>
                     <input type="file"
                         className="form-control"
                         id="image"
                         name="image"
                         onChange={this.uploadImageBase64}
-                        placeholder="Фото" />
+                        placeholder="Photo" />
                     {!!errors.image ? <span className="help-block">{errors.image}</span> : ''}
                 </div>
 
@@ -168,7 +184,7 @@ class ProductForm extends React.Component {
 
                 <div className="form-group">
                     <div className="col-md-4">
-                        <button type="submit" className="btn btn-warning">Додати <span className="glyphicon glyphicon-send"></span></button>
+                        <button type="submit" className="btn btn-warning">Add <span className="glyphicon glyphicon-send"></span></button>
                     </div>
                 </div>
             </form>

@@ -33,8 +33,8 @@ class ProductsPage extends Component {
             loading ? <span>Loading ...</span> :
                 <div>
                     <h1>Page Products</h1>
-                    <Link to="/products/new" className="btn btn-success">Add Product</Link>
                     <ProductsList products={this.props.products} deleteProduct={this.props.deleteProduct} />
+                    <Link to="/products/new" className="btn btn-success">Add Product</Link>
                 </div>
         );
         return (

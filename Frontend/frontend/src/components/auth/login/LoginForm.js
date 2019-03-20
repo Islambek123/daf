@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { login } from "../../../actions/authActions";
+
 import { Redirect } from "react-router";
 
 class LoginForm extends Component {
@@ -13,7 +13,6 @@ class LoginForm extends Component {
         done: false,
         isLoading: false
     }
-
     setStateByErrors = (name, value) => {
         if (!!this.state.errors[name]) {
             let errors = Object.assign({}, this.state.errors);
@@ -47,14 +46,20 @@ class LoginForm extends Component {
         if (isValid) {
             const { email, password } = this.state;
             this.setState({ isLoading: true });
-            this.props.login({ email, password }).then(
-                () => this.setState({ done: true }),
-                (err) => this.setState({ errors: err.response.data, isLoading: false })
-            );
-            //this.props.saveGame({id, title, image, description})
-            //    .catch((err) => { 
-            //        this.setState({ errors: err.response.data });
-            //     });
+            this.props.login(
+                {
+                    email,
+                    password
+                }).then(
+                    () => {
+                        this.props.addFlashMessage({
+                            type: 'success',
+                            text: 'Login Success'
+                        });
+                        this.setState({ done: true })
+                    },
+                    (err) => this.setState({ errors: err.response.data, isLoading: false })
+                );
         }
         else {
             this.setState({ errors });
@@ -105,8 +110,8 @@ class LoginForm extends Component {
         );
         return (
             this.state.done ?
-                    <Redirect to="/products" /> :
-                    form
+                <Redirect to="/products" /> :
+                form
         );
     }
 }
@@ -115,4 +120,4 @@ LoginForm.propTypes =
         login: PropTypes.func.isRequired
     }
 
-export default connect(null, { login })(LoginForm);
+export default LoginForm;

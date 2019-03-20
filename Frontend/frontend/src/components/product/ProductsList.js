@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ProductCard from './ProductCard';
+import addFlashMessage from '../flash/FlashMessage'
 
 class ProductsList extends Component {
     state = {  }
@@ -9,11 +10,11 @@ class ProductsList extends Component {
         console.log('--ProductsList props--', this.props);
         const { products } = this.props;
         const emptyMessage = (
-            <p>Список пустий</p>
+            <h4><strong>List is Empty</strong></h4>
         );
         const productsList = (
             <div className="row">
-                {products.map(item => <ProductCard product={item} key={item.id} deleteProduct={this.props.deleteProduct} />)}
+                {products.map(item => <ProductCard product={item} key={item.id} deleteProduct={this.props.deleteProduct} addFlashMessage={addFlashMessage}/>)}
             </div>
         );
         return ( 

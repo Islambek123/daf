@@ -22,6 +22,7 @@ namespace BackendCore.Controllers
 {
     [Produces("application/json")]
     [Route("api/auth")]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         readonly UserManager<IdentityUser> _userManager;
@@ -34,7 +35,6 @@ namespace BackendCore.Controllers
             _signInManager = signInManager;
             _config = config.Value;
         }
-        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegisterCredentials credentials)
         {
@@ -55,7 +55,6 @@ namespace BackendCore.Controllers
             }
             return BadRequest();
         }
-        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginCredentials credentials)
         {

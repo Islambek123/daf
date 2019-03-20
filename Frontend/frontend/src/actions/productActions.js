@@ -8,10 +8,10 @@ export function setProducts(products) {
     };
 }
 
-export function addProduct(PRODUCT) {
+export function addProduct(product) {
     return{
-        type:ADD_PRODUCT,
-        PRODUCT
+        type: ADD_PRODUCT,
+        product
     }
 }
 
@@ -59,11 +59,9 @@ export function updateProduct(data) {
 }
 export function fetchProducts() {
     return dispatch => {
-        fetch(`https://localhost:44318/api/product`)
-            .then(res => res.json())
-            .then(data => dispatch(setProducts(data)))
-            .catch(err => {
-                console.log("-----Bad request----2", err);
+        return axios.get('https://localhost:44318/api/product')
+            .then(res => {
+                dispatch(setProducts(res.data));
             });
     }
 }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using BackendCore.DAL.Entites;
 using BackendCore.DAL.Entites.Products;
 using BackendCore.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +20,18 @@ namespace BackendCore.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    //[Route("api/product")]
-    //[EnableCors]
+    [Authorize]
+    //[Authorize(AuthenticationSchemes =
+    //    JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly EFDbContext _context;
         private readonly AppConfiguration _config;
+        private string Path
+        {
+            get { return Path; }
+            set { string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, "/api/product/image/"); }
+        }
         public ProductController(EFDbContext context, IOptions<AppConfiguration> config)
         {
             _context = context;
@@ -50,6 +58,9 @@ namespace BackendCore.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ProductEntity>> Get()
         {
+            string path = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, "/api/product/image/");
+            var folder = Url.Content("~") + _config.Path;
+
             var model = _context.Products
                 .Select(g => new ProductEntity
                 {
@@ -58,9 +69,16 @@ namespace BackendCore.Controllers
                     Description = g.Description,
                     Manufactor = g.Manufactor,
                     Available = g.Available,
-                    Image = g.Image
+                    Image = path + g.Image
                 }).ToList();
             return model;
+        }
+        [AllowAnonymous]
+        [HttpGet("image/{name}")]
+        public IActionResult Get([FromRoute] string name)
+        {
+            var image = System.IO.File.OpenRead(_config.Path + name);
+            return File(image, "image/jpeg");
         }
         [HttpGet("{id}")]
         public ActionResult<ProductEntity> Get(int id)
@@ -75,10 +93,11 @@ namespace BackendCore.Controllers
                 model.Description = product.Description;
                 model.Manufactor = product.Manufactor;
                 model.Available = product.Available;
-                model.Image = product.Image; //?>?????
+                model.Image = product.Image;
             }
             return model;
         }
+        
         [HttpPost]
         public ActionResult<ProductViewModel> PostAdd([FromBody]ProductEntity model)
         {
@@ -92,7 +111,7 @@ namespace BackendCore.Controllers
                 string base64 = model.Image.Split(',')[1];
                 byte[] imageBytes = Convert.FromBase64String(base64);
                 System.IO.File.WriteAllBytes(imagePath, imageBytes);
-                ProductEntity game = new ProductEntity()
+                ProductEntity product = new ProductEntity()
                 {
                     Image = uniqueName,
                     Available = model.Available,
@@ -100,19 +119,19 @@ namespace BackendCore.Controllers
                     Description = model.Description,
                     Name = model.Name
                 };
-                _context.Products.Add(game);
+                _context.Products.Add(product);
                 _context.SaveChanges();
 
                 var folder = Url.Content(_config.Path);
                 var image = folder + uniqueName;
                 ProductViewModel responseModel = new ProductViewModel()
                 {
-                    Id = game.Id,
-                    Name = game.Name,
-                    Description = game.Description,
-                    Image = game.Image,
-                    Manufactor = game.Manufactor,
-                    Available = game.Available
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Image = image,
+                    Manufactor = product.Manufactor,
+                    Available = product.Available
                 };
                 return responseModel;
             }
@@ -127,6 +146,14 @@ namespace BackendCore.Controllers
         {
             if (ModelState.IsValid)
             {
+                string uniqueName = String.Empty;
+                string imagePath = String.Empty;
+                uniqueName = Guid.NewGuid().ToString() + ".jpeg";
+                imagePath = _config.Path
+                    + uniqueName;
+                string base64 = model.Image.Split(',')[1];
+                byte[] imageBytes = Convert.FromBase64String(base64);
+                System.IO.File.WriteAllBytes(imagePath, imageBytes);
                 var product = _context.Products
                     .SingleOrDefault(g => g.Id == model.Id);
                 if (product != null)
@@ -135,7 +162,7 @@ namespace BackendCore.Controllers
                     product.Description = model.Description;
                     product.Available = model.Available;
                     product.Manufactor = model.Manufactor;
-                    product.Image = model.Image;
+                    product.Image = uniqueName;
                     _context.SaveChanges();
                 }
                 return model;
@@ -164,5 +191,12 @@ namespace BackendCore.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public ActionResult Home()
+        //{
+
+        //    return Ok();
+        //}
     }
 }

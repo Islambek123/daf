@@ -15,12 +15,13 @@ class NavigationBar extends Component {
         console.log("login user: ", this.props);
 
         const { isAuthenticated, user } = this.props.auth;
-        
-        console.log(isAuthenticated);
 
+        console.log(isAuthenticated);
+        
         const userLinks = (
             <ul className="nav navbar-nav navbar-right">
-                <li><a href="#" onClick={this.logout.bind(this)}>{user.name} Logout</a></li>
+                <li><Link to={"/edit/" +  user.name }>{user.name}</Link></li>
+                <li><a onClick={this.logout.bind(this)}>Logout</a></li>
             </ul>
         );
         //const userLinks = ''; 
@@ -41,11 +42,11 @@ class NavigationBar extends Component {
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <Link className="navbar-brand" to="/products">Project crocodile</Link>
+                        <Link className="navbar-brand" to="/">Project SHAG</Link>
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav">
-                            <li><Link to ="/products">Products</Link></li>
+                            <li><Link to="/products">Products</Link></li>
                         </ul>
                         {isAuthenticated ? userLinks : guestLinks}
                     </div>
@@ -54,10 +55,10 @@ class NavigationBar extends Component {
         );
     }
 }
-const mapStateToProps=(state)=>{
+const mapStateToProps = (state) => {
     return {
         auth: state.auth
     };
 }
 
-export default connect(mapStateToProps, {logout})(NavigationBar);
+export default connect(mapStateToProps, { logout })(NavigationBar);

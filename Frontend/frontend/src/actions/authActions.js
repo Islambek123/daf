@@ -1,11 +1,17 @@
 import axios from 'axios';
-import { SET_CURRENT_USER } from './types';
+import { SET_CURRENT_USER, GET_CURRENT_USER } from './types';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
+import jwt from 'jsonwebtoken';
 
 export function setCurrentUser(user) {
     return {
         type: SET_CURRENT_USER,
         user
+    }
+}
+export function getCurrentUser(){
+    return{
+        type: GET_CURRENT_USER
     }
 }
 
@@ -24,10 +30,10 @@ export function login(data) {
             .then(res => {
                 var token = res.data;
                 console.log('--get token serve--', token);
-                //localStorage.setItem('jwtToken', token);
-               // localStorage.setItem('user', JSON.stringify(user));
-                //setAuthorizationToken(token);
-                //dispatch(setCurrentUser(user));
+                var user = jwt.decode(token);
+                localStorage.setItem('jwtToken', token);
+                setAuthorizationToken(token);
+                dispatch(setCurrentUser(user));
             });
     }
 }

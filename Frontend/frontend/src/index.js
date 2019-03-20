@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import rootReducer from "./rootReducer";
 import setAuthorizationToken from './utils/setAuthorizationToken';
 import { setCurrentUser } from './actions/authActions';
+import jwt from 'jsonwebtoken';
 
 const store = createStore(
     rootReducer,
@@ -19,10 +20,10 @@ const store = createStore(
 );
 
 if (localStorage.jwtToken) {
-    //localStorage.clear();
-    localStorage.clear();
+
     setAuthorizationToken(localStorage.jwtToken);
-    store.dispatch(setCurrentUser(JSON.parse(localStorage.user))); //rofaln
+    var user = jwt.decode(localStorage.jwtToken);
+    store.dispatch(setCurrentUser(user)); //rofaln
 }
 
 ReactDOM.render(

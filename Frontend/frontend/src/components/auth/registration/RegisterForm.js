@@ -66,7 +66,7 @@ class RegisterForm extends Component {
                     () => {
                         this.props.addFlashMessage({
                             type: 'success',
-                            text: 'Реєстрація пройшла успішно'
+                            text: 'Registration Success'
                         });
                         this.setState({ done: true })
                     },
@@ -90,8 +90,8 @@ class RegisterForm extends Component {
         }
     }
     verifyCallback  (recaptchaToken) {
-        //this.setState({ captcha: recaptchaToken });
-        this.state.captcha = recaptchaToken
+        this.setState({ captcha: recaptchaToken });
+        //this.state.captcha = recaptchaToken
         console.log(recaptchaToken, "<= your recaptcha token")
     }
    
@@ -156,7 +156,7 @@ class RegisterForm extends Component {
                 </div>
                 <div className="form-group">
                     <div className="col-md-4">
-                        <button type="submit" className="btn btn-warning" disabled={isLoading}>Вхід<span className="glyphicon glyphicon-send"></span></button>
+                        <button type="submit" className="btn btn-warning" disabled={isLoading}>Registration<span className="glyphicon glyphicon-send"></span></button>
                     </div>
                 </div>
             </form>
