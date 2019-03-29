@@ -10,16 +10,16 @@ class ProductCard extends Component {
         const { product } = this.props;
         return (
             <div className="item col-xs-12 col-lg-4 col-md-6 col-sm-12">
-                <div className="thumbnail">
+                <div className="thumbnail list">
                     <div className="custom">
                         <img className="group list-group-image" src={product.image} alt="" />
                     </div>
                     <div className="caption">
-                        
-                            <h4 className="group inner list-group-item-heading">
+
+                        <h4 className="group inner list-group-item-heading">
                             <strong>{product.name}</strong>
-                            </h4>
-                        
+                        </h4>
+
                         <i>
                             <p className="group inner list-group-item-text">
                                 {product.description}
@@ -29,9 +29,10 @@ class ProductCard extends Component {
                             {product.manufactor}
                         </p>
                     </div>
-                    <div>
-                        <Link to={`/product/${product.id}`} className="btn btn-success">Edit</Link>
-                        <div className="btn btn-danger" onClick=
+                        
+                    <div className="text-right but">
+                    <Link to={`/product/${product.id}`} className="btn btn-success fixed-bottom">Edit</Link>
+                        <div className="btn btn-danger fixed-bottom" onClick=
                             {
                                 () => this.props.deleteProduct(product.id)
 

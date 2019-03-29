@@ -52,6 +52,23 @@ namespace BackendCore.Controllers
             }
             return errors;
         }
+        [HttpGet("some")]
+        public ActionResult<IEnumerable<HomeImages>> GetSome()
+        {
+            string path = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, "/api/product/image/");
+            var folder = Url.Content("~") + _config.Path;
+
+            var model = _context.Products
+                .OrderByDescending(g => g.Id)
+                .Select(g => new HomeImages
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    Descriptions = g.Description,
+                    Image = path + g.Image
+                }).Take(4).ToList();
+            return model;
+        }
         [HttpGet]
         public ActionResult<IEnumerable<ProductEntity>> Get()
         {

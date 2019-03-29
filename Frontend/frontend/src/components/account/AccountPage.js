@@ -36,9 +36,6 @@ class AccountPage extends Component {
                     <div className="col-md-6 col-offset-6">
                         <AccountForm user={this.props.user} />
                     </div>
-                    <div className="col-md-6 col-offset-6">
-                        <Link to="/email/confirm" className="btn btn-success">Confirm Email</Link>
-                    </div>
                 </div>
         );
         return (

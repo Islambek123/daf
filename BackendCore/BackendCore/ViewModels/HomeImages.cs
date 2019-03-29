@@ -7,6 +7,9 @@ namespace BackendCore.ViewModels
 {
     public class HomeImages
     {
-        public List<string> Images { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Image { get; set; }
+        public string Descriptions { get; set; }
     }
 }

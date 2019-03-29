@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchProducts } from "../../actions/productActions";
+import { fetchSomeProducts } from "../../actions/productActions";
 import HomeProduct from './HomeRecentAdded';
 import HomeCarousel from './HomeCarousel';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ class HomePage extends React.Component {
         redirect: false
     }
     componentDidMount = () => {
-        this.props.fetchProducts()
+        this.props.fetchSomeProducts()
             .then(
                 () => { this.setState({ loading: false }) },
                 (err) => {
@@ -21,17 +21,17 @@ class HomePage extends React.Component {
                     }
                 }
             );
-            
+
     }
     render() {
-        console.log(this.props);
+        console.log(this.props.products);
         return (
             <div>
                 <div className="col-md-6">
-                    <HomeCarousel />
+                    <HomeCarousel products={this.props.products} />
                 </div>
                 <div className="col-md-6">
-                    <HomeProduct />
+                    <HomeProduct products={this.props.products} />
                 </div>
             </div>
         );
@@ -43,4 +43,4 @@ function mapStateToProps(state) {
         products: state.products
     };
 }
-export default connect(mapStateToProps, { fetchProducts })(HomePage);
+export default connect(mapStateToProps, { fetchSomeProducts })(HomePage);

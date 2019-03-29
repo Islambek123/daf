@@ -32,7 +32,7 @@ class ProductsPage extends Component {
         const page = (
             loading ? <span>Loading ...</span> :
                 <div>
-                    <h1>Page Products</h1>
+                    <h1>Products</h1>
                     <ProductsList products={this.props.products} deleteProduct={this.props.deleteProduct} />
                     <Link to="/products/new" className="btn btn-success">Add Product</Link>
                 </div>

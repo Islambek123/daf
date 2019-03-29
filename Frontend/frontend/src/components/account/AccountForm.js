@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 class AccountForm extends React.Component {
     state = {
@@ -22,12 +23,20 @@ class AccountForm extends React.Component {
         console.log(user.email);
         return (
             <form>
+                <label htmlFor="text">User Name</label>
                 <input type="text"
-                            className="form-control"
-                            id="text"
-                            name="text"
-                            value={user.userName}/>
+                    className="form-control"
+                    id="text"
+                    name="text"
+                    value={user.userName} />
+                <div className="form-group">
+                    <div>
+                        <button type="submit" className="btn btn-danger" >Continue<span className="glyphicon glyphicon-send"></span></button>
+                    </div>
+                </div>
             </form>
+
+
         )
 
     }

@@ -7,6 +7,12 @@ export function setProducts(products) {
         products
     };
 }
+export function setSomeProducts(products) {
+    return{
+        type: SET_PRODUCTS,
+        products
+    }
+}
 
 export function addProduct(product) {
     return{
@@ -62,6 +68,14 @@ export function fetchProducts() {
         return axios.get('https://localhost:44318/api/product')
             .then(res => {
                 dispatch(setProducts(res.data));
+            });
+    }
+}
+export function fetchSomeProducts(){
+    return dispatch => {
+        return axios.get('https://localhost:44318/api/product/some')
+            .then(res => {
+                dispatch(setSomeProducts(res.data));
             });
     }
 }

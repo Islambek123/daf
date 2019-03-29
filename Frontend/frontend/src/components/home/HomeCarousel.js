@@ -3,32 +3,28 @@ import logo from '../../assets/1.jpg';
 import '../../styles/homepage.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
+import '../../styles/customImage.css';
 
 class HomeCarousel extends React.Component{
 
     render(){
+        const { products } = this.props;
         return(
             <Carousel
                         autoPlay
                         width="90%"
                         useKeyboardArrows
                         showStatus={false}
-                        infiniteLoop={true}>
-
-                        <div>
-                            <img src={logo} />
-                            <p className="legend">Legend 1</p>
-                        </div>
-
-                        <div>
-                            <img src={logo} />
-                            <p className="legend">Legend 2</p>
-                        </div>
-
-                        <div>
-                            <img src={logo} />
-                            <p className="legend">Legend 3</p>
-                        </div>
+                        infiniteLoop={true}
+                        >
+                        
+                       { products.map(item=> 
+                       <div>
+                           <div></div>
+                            <img src={item.image}/>
+                            <p className="legend">{item.name}</p>
+                        </div>)}
+                        
 
                     </Carousel>
         );
