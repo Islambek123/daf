@@ -1,0 +1,12 @@
+.custom img{
+    height: 200px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+/* @media only screen and (max-width: 800px)
+{
+    .item{
+        width: 100%;
+    }
+} */

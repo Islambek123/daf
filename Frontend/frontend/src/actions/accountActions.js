@@ -1,21 +1,33 @@
-import { GET_CURRENT_USER } from './types';
+import { USER_GOT } from './types';
 import axios from 'axios';
 
-export function userFetched(user) {
+export function userGot(user) {
     return {
-        type: GET_CURRENT_USER,
-        user 
+        type: USER_GOT,
+        user
     }
 }
 
-export function getUser(){
+export function fetchUser() {
     return dispatch => {
-        fetch(`https://localhost:44318/api/account/getUser`)
-        .then(res => res.json())
-        .then(res => dispatch(userFetched(res.data)))
-        .catch(err => {
-            console.log("-----Bad request----1", err);
-        });
-        console.log("xd");
+        return axios.get('https://localhost:44318/api/account/user')
+            .then(res => {
+                dispatch(userGot(res.data))
+            })
+            .catch(err => {
+                console.log("Bad request fetch user", err);
+            });
+    }
+}
+
+export function validateToken(data){
+    return () => {
+        return axios.post('https://localhost:44318/api/account/token', data)
+            .then(res => {
+                console.log("Confirm Token Reposnse", res.data);
+            })
+            .catch(err => {
+                console.log("Bad request for token validation.", err);
+            });
     }
 }

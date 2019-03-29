@@ -20,10 +20,9 @@ const store = createStore(
 );
 
 if (localStorage.jwtToken) {
-
     setAuthorizationToken(localStorage.jwtToken);
     var user = jwt.decode(localStorage.jwtToken);
-    store.dispatch(setCurrentUser(user)); //rofaln
+    store.dispatch(setCurrentUser(user)); 
 }
 
 ReactDOM.render(

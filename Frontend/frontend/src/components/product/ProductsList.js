@@ -4,9 +4,9 @@ import ProductCard from './ProductCard';
 import addFlashMessage from '../flash/FlashMessage'
 
 class ProductsList extends Component {
-    state = {  }
-    
-    render() { 
+    state = {}
+
+    render() {
         console.log('--ProductsList props--', this.props);
         const { products } = this.props;
         const emptyMessage = (
@@ -14,14 +14,15 @@ class ProductsList extends Component {
         );
         const productsList = (
             <div className="row">
-                {products.map(item => <ProductCard product={item} key={item.id} deleteProduct={this.props.deleteProduct} addFlashMessage={addFlashMessage}/>)}
+                {products.map(item => <ProductCard product={item} key={item.id} deleteProduct={this.props.deleteProduct}
+                    addFlashMessage={addFlashMessage} />)}
             </div>
         );
-        return ( 
+        return (
             <div>
-                {products.length===0 ? emptyMessage : productsList}
+                {products.length === 0 ? emptyMessage : productsList}
             </div>
-         );
+        );
     }
 }
 
@@ -29,5 +30,5 @@ ProductsList.propTypes = {
     products: PropTypes.array.isRequired,
     deleteProduct: PropTypes.func.isRequired
 };
- 
+
 export default ProductsList;

@@ -1,32 +1,44 @@
 import React, { Component } from 'react';
 import AccountForm from './AccountForm';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router";
-import axios from 'axios';
-import { getUser } from '../../actions/accountActions';
+import { fetchUser } from '../../actions/accountActions';
+import { connect } from 'react-redux';
 
 class AccountPage extends Component {
     state = {
+        loading: true,
         redirect: false,
-        loading: true
+        errors: {}
     }
     componentDidMount() {
-        //axios.get(`https://localhost:44318/api/account/getUser`);
-        //if (this.props.match.params.id) {
-            //this.props.getCurrentUser("xd@gmail.com");
-        //}
+        this.props.fetchUser()
+            .then(
+                () => { this.setState({ loading: false }) },
+                (err) => {
+                    if (typeof (err.response) == 'undefined')
+                        console.log("err.response", err);
+                    else if (err.response.status == 401) {
+                        this.setState({ redirect: true });
+                    }
+                }
+            );
+            console.log("USER", this.props.user);
     }
-
     render() {
-        const { loading, getUser } = this.state;
+        console.log("User props: ", this.props);
+        const { loading, errors} = this.state;
         const page = (
-            loading ? <span>Loading ...</span> :
+            loading ? <strong>LOADING !!!!</strong> :
                 <div>
-                    <h1>Edit Profile</h1>
-                    <Link to="/email/confirm" className="btn btn-success">Confirm Email</Link>
-
-                    <AccountForm getUser={getUser} />
+                    <h1>Edit Profile {this.props.user.userName}</h1>
+                    <div className="col-md-6 col-offset-6">
+                        <AccountForm user={this.props.user} />
+                    </div>
+                    <div className="col-md-6 col-offset-6">
+                        <Link to="/email/confirm" className="btn btn-success">Confirm Email</Link>
+                    </div>
                 </div>
         );
         return (
@@ -35,19 +47,26 @@ class AccountPage extends Component {
                 page
         );
     }
-}
 
-const mapStateToProps = (state, props) => {
-    if (props.match.params.id) {
-        const { id } = props.match.params;
-        const { user } = state;
-        console.log(id);
-        console.log(user);
-        return {
-            user: user.find(item => (item.id == id))
-        }
-    }
-    return { user: null };
 }
-export default connect(mapStateToProps, { /*fetchUser*/ })(AccountPage);
+// AccountForm.propTypes = {
+//     user: PropTypes.element.isRequired,
+//     fetchUser: PropTypes.func.isRequired
+// }
+const mapStateToProps = (state) => {
+
+    return {
+        user: state.account.user
+    };
+}
+export default connect(mapStateToProps, { fetchUser })(AccountPage);
+
+
+    // componentDidMount() {
+    //     //this.props.getUser().then(console.log("1"));
+    //     //axios.get(`https://localhost:44318/api/account/getUser`);
+    //     //if (this.props.match.params.id) {
+    //     //this.props.getCurrentUser("xd@gmail.com");
+    //     //}
+    // }
 

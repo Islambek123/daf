@@ -17,12 +17,10 @@ using Microsoft.IdentityModel.Protocols;
 
 namespace BackendCore.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     [Produces("application/json")]
     [Authorize]
-    //[Authorize(AuthenticationSchemes =
-    //    JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly EFDbContext _context;
@@ -54,7 +52,6 @@ namespace BackendCore.Controllers
             }
             return errors;
         }
-        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<ProductEntity>> Get()
         {
@@ -141,7 +138,6 @@ namespace BackendCore.Controllers
             return BadRequest(errors);
         }
         [HttpPut("{id}")]
-        //[Route("api/product/{id:int}")]
         public ActionResult<ProductViewModel> Put(int id, [FromBody]ProductViewModel model)
         {
             if (ModelState.IsValid)
@@ -191,12 +187,6 @@ namespace BackendCore.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult Home()
-        //{
-
-        //    return Ok();
-        //}
+        
     }
 }

@@ -37,6 +37,7 @@ namespace BackendCore.Controllers
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegisterCredentials credentials)
+
         {
             if (ModelState.IsValid)
             {

@@ -9,5 +9,6 @@ import account from './reducers/account';
 export default combineReducers({
     products, 
     auth,
-    flashMessages
+    flashMessages,
+    account
 });

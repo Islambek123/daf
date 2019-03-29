@@ -25,14 +25,21 @@ namespace BackendCore.Controllers
             _context = context;
             _userManager = userManager;
         }
-        [HttpGet("getUser")]
-        public async Task<IdentityUser> GetUser()
+        [HttpGet("user")]
+        public ActionResult<AccountCredentials> GetUser()
         {
-            var infp = User.Claims;
-            var user = await GetCurrentUserAsync();
-
+            var id = User.FindFirst("id").Value;
+            var _user = _context.Users.SingleOrDefault(u => u.Id == id);
+            AccountCredentials user = new AccountCredentials
+            {
+                UserName = _user.UserName
+            };
             return user;
         }
-        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        [HttpPost("token")]
+        public ActionResult ValidateToken(string token)
+        {
+            return Ok();
+        }
     }
 }

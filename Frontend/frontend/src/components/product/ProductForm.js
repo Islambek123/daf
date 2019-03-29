@@ -15,9 +15,9 @@ class ProductForm extends React.Component {
         description: this.props.product ? this.props.product.description : '',
         available: this.props.product ? this.props.product.available : '',
         manufactor: this.props.product ? this.props.product.manufactor : '',
-        addOrEdit: 'Add',
+        addOrEdit: this.props.product ? 'Edit' : 'Add',
         errors: {
-            //name: 'Обовязкове поле'
+            
         },
         loading: false
     }
@@ -184,7 +184,7 @@ class ProductForm extends React.Component {
 
                 <div className="form-group">
                     <div className="col-md-4">
-                        <button type="submit" className="btn btn-warning">Add <span className="glyphicon glyphicon-send"></span></button>
+                        <button type="submit" className="btn btn-warning">{addOrEdit} <span className="glyphicon glyphicon-send"></span></button>
                     </div>
                 </div>
             </form>

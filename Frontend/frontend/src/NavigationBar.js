@@ -24,7 +24,6 @@ class NavigationBar extends Component {
                 <li><a onClick={this.logout.bind(this)}>Logout</a></li>
             </ul>
         );
-        //const userLinks = ''; 
         const guestLinks = (
             <ul className="nav navbar-nav navbar-right">
                 <li><Link to="/register">Register</Link></li>
@@ -42,7 +41,7 @@ class NavigationBar extends Component {
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <Link className="navbar-brand" to="/">Project SHAG</Link>
+                        <Link className="navbar-brand" to="/">EnerShop</Link>
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav">

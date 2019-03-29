@@ -3,12 +3,14 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { ReCaptcha } from 'react-recaptcha-google';
 import { Redirect } from 'react-router';
+import '../../../styles/button.css'
 
 class RegisterForm extends Component {
     state = {
         email: '',
         username: '',
         password: '',
+        confirmPassword: '',
         captcha: '',
 
         errors: {},
@@ -51,8 +53,12 @@ class RegisterForm extends Component {
         if (this.state.username === '') errors.username = "Cant't be empty!"
         if (this.state.password === '') errors.password = "Cant't be empty!"
         if (this.state.password.length < 6) errors.password = "Minimum length is 7!"
+        if (this.state.confirmPassword === '') errors.confirmPassword = "Cant't be empty!"
         if (this.state.captcha === '') errors.captcha = "Confirm Captcha!"
-
+        if (this.state.password != this.state.confirmPassword) {
+            errors.password = "Passwords do not match";
+            errors.confirmPassword = "Passwords do not match"
+        }
         const isValid = Object.keys(errors).length === 0
         if (isValid) {
             this.props.register(
@@ -61,7 +67,6 @@ class RegisterForm extends Component {
                     Email: email,
                     UserName: username,
                     Password: password,
-                    
                 }).then(
                     () => {
                         this.props.addFlashMessage({
@@ -89,13 +94,13 @@ class RegisterForm extends Component {
             this.captchaDemo.reset();
         }
     }
-    verifyCallback  (recaptchaToken) {
+    verifyCallback(recaptchaToken) {
         this.setState({ captcha: recaptchaToken });
         //this.state.captcha = recaptchaToken
         console.log(recaptchaToken, "<= your recaptcha token")
     }
-   
-    
+
+
     render() {
         const { errors, isLoading } = this.state;
 
@@ -139,6 +144,18 @@ class RegisterForm extends Component {
                     </div>
                 </div>
                 <div className="form-group">
+                    <div className={classnames('form-group', { 'has-error': !!errors.confirmPassword })}>
+                        <label htmlFor="confirmPassword">Confirm Password</label>
+                        <input type="password"
+                            className="form-control"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            value={this.state.confirmPassword}
+                            onChange={this.handleChange} />
+                        {!!errors.confirmPassword ? <span className="help-block">{errors.confirmPassword}</span> : ''}
+                    </div>
+                </div>
+                <div className="form-group">
                     <div className={classnames('form-group', { 'has-error': !!errors.captcha })}>
                         <ReCaptcha
                             id="captcha"
@@ -155,16 +172,14 @@ class RegisterForm extends Component {
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-md-4">
-                        <button type="submit" className="btn btn-warning" disabled={isLoading}>Registration<span className="glyphicon glyphicon-send"></span></button>
-                    </div>
+                    <button type="submit" className="btn btn-warning mbtn" disabled={isLoading}>Registration<span className="glyphicon glyphicon-send"></span></button>
                 </div>
             </form>
         );
         return (
             this.state.done ?
-                    <Redirect to="/login" /> :
-                    form
+                <Redirect to="/login" /> :
+                form
         );
     }
 }
@@ -174,4 +189,4 @@ RegisterForm.propTypes =
         register: PropTypes.func.isRequired
     }
 
-    export default RegisterForm;
+export default RegisterForm;

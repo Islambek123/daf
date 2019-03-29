@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { Redirect } from "react-router";
+import '../../../styles/button.css'
 
 class LoginForm extends Component {
     state = {
@@ -101,8 +102,8 @@ class LoginForm extends Component {
                 </div>
 
                 <div className="form-group">
-                    <div className="col-md-4">
-                        <button type="submit" className="btn btn-warning" disabled={isLoading}>Вхід<span className="glyphicon glyphicon-send"></span></button>
+                    <div>
+                        <button type="submit" className="btn btn-warning mbtn" disabled={isLoading}>Login<span className="glyphicon glyphicon-send"></span></button>
                     </div>
                 </div>
 

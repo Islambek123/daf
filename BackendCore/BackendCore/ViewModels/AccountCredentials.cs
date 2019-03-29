@@ -7,5 +7,6 @@ namespace BackendCore.ViewModels
 {
     public class AccountCredentials
     {
+        public string UserName { get; set; }
     }
 }

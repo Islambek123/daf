@@ -21,6 +21,7 @@ import BasketPage from './components/basket/BasketPage';
 import AccountPage from './components/account/AccountPage';
 
 import HomePage from './components/home/HomePage'
+import AccountConfirm from './components/account/AccountConfirm';
 
 class App extends Component {
   render() {
@@ -40,6 +41,7 @@ class App extends Component {
         <Route exact path='/basket' component={BasketPage} />
 
         <Route exact path = '/edit/:email' component = {requireAuth(AccountPage)}/>
+        <Route exact path = '/email/confirm' component = {requireAuth(AccountConfirm)}/>
 
         <Route exact path = '/' component = {HomePage}/>
 
